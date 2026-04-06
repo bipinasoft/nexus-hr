@@ -1,0 +1,61 @@
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      NODE_ENV: production
+
+  backend:
+    build:
+      context: ..
+      dockerfile: infra/python-service.Dockerfile
+      args:
+        SERVICE_PATH: backend
+    ports:
+      - "8007:8000"
+    depends_on:
+      - postgres
+      - redis
+      - mongo
+    environment:
+      PORT: 8000
+      NEXUSHR_SERVICE_NAME: backend-service
+      NEXUSHR_OIDC_ISSUER_URL: https://login.nexushr.example.com/realms/nexushr
+      NEXUSHR_OIDC_JWKS_URL: https://login.nexushr.example.com/realms/nexushr/protocol/openid-connect/certs
+      NEXUSHR_OIDC_AUDIENCE: nexushr-api
+      NEXUSHR_MONGODB_AUDIT_URI: mongodb://mongo:27017
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nexushr
+      POSTGRES_USER: nexushr
+      POSTGRES_PASSWORD: nexushr
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  postgres-data:
+  mongo-data:

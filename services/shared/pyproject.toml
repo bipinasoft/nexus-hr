@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexus-shared"
+version = "0.1.0"
+description = "Shared security and compliance primitives for NexusHR microservices."
+requires-python = ">=3.13"
+dependencies = [
+  "fastapi>=0.115.0,<1.0.0",
+  "httpx>=0.28.0,<1.0.0",
+  "pydantic-settings>=2.6.1,<3.0.0",
+  "pymongo>=4.10.1,<5.0.0",
+  "python-jose[cryptography]>=3.3.0,<4.0.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nexus_shared*"]
+

@@ -1,0 +1,15 @@
+{
+  "name": "nexushr-platform",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @nexushr/web",
+    "build:web": "npm run build --workspace @nexushr/web",
+    "lint:web": "npm run lint --workspace @nexushr/web",
+    "test:e2e": "npm run e2e --workspace @nexushr/web"
+  }
+}
+
