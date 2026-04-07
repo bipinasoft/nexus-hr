@@ -6,10 +6,6 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from nexus_shared import Permission, Role, issue_local_access_token
-from nexus_shared.config import get_settings
-from nexus_shared.models import DEFAULT_ROLE_PERMISSIONS
-
 from ..core.contracts import AuthConfig, AuthMethod, AuthUser, LoginRequest, LoginResponse
 from ..core.demo_data import (
     DEMO_DOMAIN,
@@ -19,6 +15,9 @@ from ..core.demo_data import (
 )
 from ..core.passwords import verify_password
 from ..db.models import Employee, Organization
+from ..platform import Permission, Role, issue_local_access_token
+from ..platform.config import get_settings
+from ..platform.models import DEFAULT_ROLE_PERMISSIONS
 
 
 def build_auth_config() -> AuthConfig:

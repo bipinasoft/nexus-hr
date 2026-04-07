@@ -132,10 +132,10 @@ export function LoginSwitcher() {
   return (
     <div className="space-y-5">
       <div className="soft-card overflow-hidden border-slate-200/90 bg-white">
-        <div className="border-b border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 px-6 py-7 text-white md:px-8">
+        <div className="border-b border-slate-200 bg-gradient-to-br from-[#120824] via-[#24104a] to-[#581c87] px-6 py-7 text-white md:px-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-cyan-200">Workforce access hub</p>
+              <p className="text-xs uppercase tracking-[0.28em] text-violet-200">Workforce access hub</p>
               <h2 className="mt-3 font-display text-3xl font-semibold">Choose the login path your organization trusts.</h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
                 Password, SSO, and OTP all land in the same product experience, with policy-aware access and fast
@@ -184,7 +184,7 @@ export function LoginSwitcher() {
             <p className="text-sm font-semibold text-slate-900">
               {methods.find((method) => method.id === active)?.helper}
             </p>
-            <span className="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
+            <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-violet-700">
               Product login flow
             </span>
           </div>
@@ -208,9 +208,9 @@ export function LoginSwitcher() {
                 <label className="mb-2 block text-sm font-medium text-slate-700">Authenticator code</label>
                 <input className="field" onChange={(event) => setMfaCode(event.target.value)} type="text" value={mfaCode} />
               </div>
-              <div className="rounded-[26px] border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm leading-7 text-emerald-900">
+              <div className="rounded-[26px] border border-violet-200 bg-violet-50 px-5 py-4 text-sm leading-7 text-violet-900">
                 <p className="font-semibold">Use the preloaded demo workspace credentials.</p>
-                <div className="mt-2 grid gap-1 text-emerald-800">
+                <div className="mt-2 grid gap-1 text-violet-800">
                   <span>Email: maya.rao@nexushr.example</span>
                   <span>Password: NexusHR!2026</span>
                   <span>MFA code: 246810</span>
@@ -279,7 +279,7 @@ export function LoginSwitcher() {
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-5 text-sm text-slate-500">
             <span>OIDC-compliant session management</span>
             <span>GDPR-ready access logging</span>
-            <Link className="font-semibold text-sky-700 hover:text-sky-600" href="/dashboard">
+            <Link className="font-semibold text-violet-700 hover:text-violet-600" href="/dashboard">
               Open the employee dashboard
             </Link>
           </div>
@@ -288,7 +288,7 @@ export function LoginSwitcher() {
 
       <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="panel-dark px-6 py-6 md:px-7">
-          <p className="text-xs uppercase tracking-[0.25em] text-cyan-200">Why it feels like product</p>
+          <p className="text-xs uppercase tracking-[0.25em] text-violet-200">Why it feels like product</p>
           <div className="mt-5 grid gap-3">
             {experienceNotes.map((item, index) => (
               <div className="rounded-[24px] border border-white/10 bg-white/5 px-4 py-4" key={item}>

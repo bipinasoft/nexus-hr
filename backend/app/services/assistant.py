@@ -7,9 +7,8 @@ import httpx
 from langgraph.graph import END, START, StateGraph
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from nexus_shared.config import get_settings
-
 from ..core.contracts import AssistantResponse, KnowledgeDocumentInput
+from ..platform.config import get_settings
 from .vector_store import RetrievedChunk, index_documents, search_knowledge, to_citations
 
 

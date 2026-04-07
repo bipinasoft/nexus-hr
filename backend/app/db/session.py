@@ -7,8 +7,6 @@ from datetime import UTC, datetime, time
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 
-from nexus_shared.config import get_settings
-
 from ..core.demo_data import (
     DEMO_DEPARTMENTS,
     DEMO_DOMAIN,
@@ -24,6 +22,7 @@ from ..core.demo_data import (
     initial_notifications,
 )
 from ..core.passwords import hash_password
+from ..platform.config import get_settings
 from .models import (
     AttendanceRecord,
     Base,

@@ -3,10 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from nexus_shared import AuditMiddleware
-from nexus_shared.config import get_settings
-
 from .db.session import database_manager
+from .platform import AuditMiddleware
+from .platform.config import get_settings
 from .routers import (
     assistant,
     attendance,

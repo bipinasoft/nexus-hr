@@ -10,7 +10,7 @@
     "dev:web": "npm run dev --workspace @nexushr/web",
     "compose:up": "docker compose -f infra/docker-compose.yml up -d --build",
     "compose:down": "docker compose -f infra/docker-compose.yml down",
-    "build:backend": "python -m compileall backend services/shared",
+    "build:backend": "python -m compileall backend",
     "build:web": "npm run build --workspace @nexushr/web",
     "lint:web": "npm run lint --workspace @nexushr/web",
     "test:backend": "cd backend && python -m pytest",

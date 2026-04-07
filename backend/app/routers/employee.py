@@ -6,19 +6,18 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from nexus_shared import (
+from ..core.contracts import EmployeeProfile
+from ..core.demo_data import DEMO_ORG_ID, get_demo_employee
+from ..core.passwords import hash_password
+from ..db.models import Employee
+from ..db.session import get_db_session
+from ..platform import (
     Permission,
     Principal,
     Role,
     get_current_principal,
     require_permissions,
 )
-
-from ..core.contracts import EmployeeProfile
-from ..core.demo_data import DEMO_ORG_ID, get_demo_employee
-from ..core.passwords import hash_password
-from ..db.models import Employee
-from ..db.session import get_db_session
 
 router = APIRouter(prefix="/v1/employees", tags=["employees"])
 

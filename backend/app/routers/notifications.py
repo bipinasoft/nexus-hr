@@ -1,16 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSocketDisconnect, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from nexus_shared import (
+from ..core.contracts import NotificationAck, NotificationItem
+from ..db.session import get_db_session
+from ..platform import (
     Permission,
     Principal,
     get_current_principal,
     require_permissions,
     resolve_principal_from_token,
 )
-
-from ..core.contracts import NotificationAck, NotificationItem
-from ..db.session import get_db_session
 from ..services.notifications import list_notifications, mark_as_read
 from ..services.websocket_hub import notification_hub
 

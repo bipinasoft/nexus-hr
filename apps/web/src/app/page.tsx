@@ -106,8 +106,8 @@ export default function HomePage() {
 
       <main className="overflow-hidden pb-6">
         <section className="shell relative pt-10 md:pt-14">
-          <div className="hero-orb left-0 top-16 h-56 w-56 bg-sky-200/45" />
-          <div className="hero-orb right-10 top-8 h-64 w-64 bg-emerald-100/60" />
+          <div className="hero-orb left-0 top-16 h-56 w-56 bg-violet-300/35" />
+          <div className="hero-orb right-10 top-8 h-64 w-64 bg-fuchsia-200/50" />
 
           <div className="grid gap-8 xl:grid-cols-[1.02fr_0.98fr] xl:items-center">
             <div className="relative z-10 space-y-8">
@@ -157,7 +157,7 @@ export default function HomePage() {
               <div className="website-card-dark overflow-hidden px-6 py-6 md:px-8 md:py-8">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.28em] text-cyan-200">Unified workspace preview</p>
+                    <p className="text-xs uppercase tracking-[0.28em] text-violet-200">Unified workspace preview</p>
                     <h2 className="mt-3 font-display text-3xl font-semibold">
                       A website-quality product surface for people operations.
                     </h2>
@@ -181,17 +181,17 @@ export default function HomePage() {
                     </div>
                     <div className="mt-3 grid grid-cols-7 gap-2">
                       {[
-                        "bg-cyan-300/75",
-                        "bg-emerald-300/80",
+                        "bg-fuchsia-300/75",
+                        "bg-violet-300/80",
                         "bg-white/10",
                         "bg-violet-300/75",
                         "bg-white/10",
                         "bg-white/5",
                         "bg-white/5",
-                        "bg-emerald-300/80",
+                        "bg-violet-300/80",
                         "bg-amber-300/80",
                         "bg-white/10",
-                        "bg-cyan-300/75",
+                        "bg-fuchsia-300/75",
                         "bg-white/10",
                         "bg-rose-300/75",
                         "bg-white/5"
@@ -207,10 +207,10 @@ export default function HomePage() {
                   </div>
 
                   <div className="grid gap-4">
-                    <div className="rounded-[28px] border border-white/10 bg-gradient-to-br from-cyan-500/20 to-sky-500/10 p-5">
+                    <div className="rounded-[28px] border border-white/10 bg-gradient-to-br from-violet-500/25 to-fuchsia-500/12 p-5">
                       <div className="flex items-center justify-between gap-3">
                         <p className="text-sm font-semibold text-white">People pulse</p>
-                        <span className="text-xs uppercase tracking-[0.18em] text-cyan-100">Live metrics</span>
+                        <span className="text-xs uppercase tracking-[0.18em] text-violet-100">Live metrics</span>
                       </div>
                       <div className="mt-4 grid gap-3 sm:grid-cols-2">
                         {[
@@ -287,7 +287,7 @@ export default function HomePage() {
                     <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Outcome</p>
                     <h3 className="mt-3 font-display text-2xl font-semibold text-slate-950">{item.title}</h3>
                     <p className="mt-3 text-sm leading-7 text-slate-600">{item.detail}</p>
-                    <p className="mt-4 text-sm font-semibold text-sky-700">{item.stat}</p>
+                    <p className="mt-4 text-sm font-semibold text-violet-700">{item.stat}</p>
                   </article>
                 ))}
               </div>

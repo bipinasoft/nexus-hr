@@ -5,12 +5,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from nexus_shared import Permission, Principal, get_current_principal, require_permissions
-
 from ..core.contracts import CheckInRequest, LeaveApprovalRequest
 from ..core.demo_data import demo_leave_requests
 from ..db.models import AttendanceRecord, LeaveRequest
 from ..db.session import get_db_session
+from ..platform import Permission, Principal, get_current_principal, require_permissions
 from ..services.dashboard import get_employee_dashboard, invalidate_dashboard_cache
 from ..services.notifications import create_notification
 

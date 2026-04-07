@@ -1,6 +1,6 @@
 FROM python:3.13-slim
 
-ARG SERVICE_PATH=services/auth-service
+ARG SERVICE_PATH=backend
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -8,7 +8,6 @@ ENV PIP_NO_CACHE_DIR=1
 
 WORKDIR /workspace
 
-COPY services /workspace/services
 COPY backend /workspace/backend
 
 WORKDIR /workspace/${SERVICE_PATH}

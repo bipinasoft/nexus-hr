@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Query
 from pymongo import MongoClient
 
-from nexus_shared import Permission, Principal, require_permissions
-from nexus_shared.config import get_settings
+from ..platform import Permission, Principal, require_permissions
+from ..platform.config import get_settings
 
 router = APIRouter(prefix="/v1/audit", tags=["audit"])
 

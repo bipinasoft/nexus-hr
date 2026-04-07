@@ -28,8 +28,8 @@ export default function LoginPage() {
 
       <main className="overflow-hidden pb-6">
         <section className="shell relative pt-10 md:pt-14">
-          <div className="hero-orb left-0 top-12 h-52 w-52 bg-sky-200/50" />
-          <div className="hero-orb right-10 top-20 h-56 w-56 bg-emerald-100/60" />
+          <div className="hero-orb left-0 top-12 h-52 w-52 bg-violet-300/35" />
+          <div className="hero-orb right-10 top-20 h-56 w-56 bg-fuchsia-200/50" />
 
           <div className="grid gap-8 xl:grid-cols-[0.86fr_1.14fr] xl:items-start">
             <div className="relative z-10 space-y-7">
@@ -58,7 +58,7 @@ export default function LoginPage() {
               </div>
 
               <div className="website-card-dark px-6 py-6">
-                <p className="text-xs uppercase tracking-[0.28em] text-cyan-200">Inside the product</p>
+                <p className="text-xs uppercase tracking-[0.28em] text-violet-200">Inside the product</p>
                 <div className="mt-5 grid gap-4 sm:grid-cols-3">
                   {[
                     ["12", "Attendance exceptions surfaced"],

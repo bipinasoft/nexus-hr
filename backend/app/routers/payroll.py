@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-from nexus_shared import Permission, Principal, require_permissions
+from ..platform import Permission, Principal, require_permissions
 
 router = APIRouter(prefix="/v1/payroll", tags=["payroll"])
 

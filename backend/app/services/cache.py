@@ -8,7 +8,7 @@ from typing import Any
 
 from redis.asyncio import Redis
 
-from nexus_shared.config import get_settings
+from ..platform.config import get_settings
 
 logger = logging.getLogger("nexushr.cache")
 

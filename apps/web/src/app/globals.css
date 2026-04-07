@@ -13,9 +13,9 @@ html {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(8, 145, 178, 0.15), transparent 24%),
-    radial-gradient(circle at 85% 10%, rgba(15, 23, 42, 0.08), transparent 25%),
-    linear-gradient(180deg, #f6f8fb 0%, #eef2f7 48%, #f9fbfd 100%);
+    radial-gradient(circle at top left, rgba(168, 85, 247, 0.18), transparent 24%),
+    radial-gradient(circle at 85% 10%, rgba(124, 58, 237, 0.12), transparent 25%),
+    linear-gradient(180deg, #faf7ff 0%, #f3efff 48%, #fcfbff 100%);
   color: #0f172a;
 }
 
@@ -32,7 +32,7 @@ body::before {
 }
 
 ::selection {
-  background: rgba(15, 118, 110, 0.18);
+  background: rgba(124, 58, 237, 0.18);
 }
 
 @layer components {
@@ -45,7 +45,7 @@ body::before {
   }
 
   .eyebrow {
-    @apply inline-flex items-center rounded-full border border-slate-200/80 bg-white/90 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-600 shadow-sm backdrop-blur;
+    @apply inline-flex items-center rounded-full border border-violet-200/80 bg-white/90 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-violet-700 shadow-sm backdrop-blur;
   }
 
   .panel {
@@ -53,7 +53,7 @@ body::before {
   }
 
   .panel-dark {
-    @apply rounded-[32px] border border-slate-800/70 bg-[#08111f] text-slate-100 shadow-halo;
+    @apply rounded-[32px] border border-violet-950/60 bg-[#140a2f] text-slate-100 shadow-halo;
   }
 
   .website-card {
@@ -61,7 +61,7 @@ body::before {
   }
 
   .website-card-dark {
-    @apply rounded-[30px] border border-white/10 bg-slate-950 text-white shadow-[0_22px_65px_rgba(2,6,23,0.28)];
+    @apply rounded-[30px] border border-violet-200/10 bg-[#120824] text-white shadow-[0_22px_65px_rgba(46,16,101,0.28)];
   }
 
   .section-title {
@@ -77,23 +77,23 @@ body::before {
   }
 
   .pill {
-    @apply inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700;
+    @apply inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700;
   }
 
   .field {
-    @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-600 focus:ring-2 focus:ring-sky-200;
+    @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-violet-600 focus:ring-2 focus:ring-violet-200;
   }
 
   .button-primary {
-    @apply inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-sky-700;
+    @apply inline-flex items-center justify-center rounded-full bg-violet-700 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-fuchsia-600;
   }
 
   .button-secondary {
-    @apply inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:border-slate-500 hover:bg-slate-50;
+    @apply inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:border-violet-400 hover:bg-violet-50;
   }
 
   .nav-link {
-    @apply text-sm font-medium text-slate-600 transition hover:text-slate-950;
+    @apply text-sm font-medium text-slate-600 transition hover:text-violet-700;
   }
 
   .metric-tile {

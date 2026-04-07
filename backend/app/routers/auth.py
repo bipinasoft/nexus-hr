@@ -1,15 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from nexus_shared import (
+from ..core.contracts import LoginRequest, LoginResponse, SSOStartRequest
+from ..db.session import get_db_session
+from ..platform import (
     Permission,
     Principal,
     get_current_principal,
     require_permissions,
 )
-
-from ..core.contracts import LoginRequest, LoginResponse, SSOStartRequest
-from ..db.session import get_db_session
 from ..services.auth import (
     build_auth_config,
     build_session_payload,

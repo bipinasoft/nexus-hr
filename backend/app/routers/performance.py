@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
-from nexus_shared import (
+from ..platform import (
     Permission,
     Principal,
     get_current_principal,

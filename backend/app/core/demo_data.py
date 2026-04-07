@@ -6,7 +6,7 @@ from datetime import UTC, date, datetime, time, timedelta
 from typing import Any
 from uuid import uuid4
 
-from nexus_shared import Role
+from ..platform import Role
 
 DEMO_ORG_ID = "org-nexus-demo"
 DEMO_TENANT_SLUG = "nexushr-demo"

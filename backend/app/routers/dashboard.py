@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from nexus_shared import Permission, Principal, get_current_principal, require_permissions
-
 from ..core.contracts import EmployeeDashboard
 from ..db.session import get_db_session
+from ..platform import Permission, Principal, get_current_principal, require_permissions
 from ..services.dashboard import get_employee_dashboard
 
 router = APIRouter(prefix="/v1/dashboard", tags=["dashboard"])

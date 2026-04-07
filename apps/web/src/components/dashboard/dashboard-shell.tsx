@@ -269,7 +269,7 @@ export function DashboardShell() {
 
   if (!session) {
     return (
-      <div className="shell py-16">
+      <div className="w-full px-6 py-16 lg:px-8">
         <div className="panel mx-auto max-w-3xl px-8 py-10 text-center">
           <p className="eyebrow">Secure Workspace Access</p>
           <h1 className="mt-6 font-display text-4xl font-semibold text-slate-950">
@@ -293,7 +293,7 @@ export function DashboardShell() {
   }
 
   return (
-    <main className="shell py-8 md:py-10">
+    <main className="w-full px-6 py-8 md:py-10 lg:px-8">
       <div className="grid gap-6">
         <section className="panel px-6 py-6 md:px-8">
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
@@ -455,7 +455,7 @@ export function DashboardShell() {
                 {notifications.map((item) => (
                   <button
                     className={`w-full rounded-[24px] border px-5 py-4 text-left transition ${
-                      item.is_read ? "border-slate-200 bg-slate-50" : "border-teal-200 bg-teal-50"
+                      item.is_read ? "border-slate-200 bg-slate-50" : "border-violet-200 bg-violet-50"
                     }`}
                     key={item.notification_id}
                     onClick={() => markAsRead(item.notification_id)}
@@ -481,7 +481,7 @@ export function DashboardShell() {
             </div>
 
             <div className="panel-dark px-6 py-6 md:px-8">
-              <p className="text-xs uppercase tracking-[0.24em] text-teal-200">NexusHR Copilot</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-violet-200">NexusHR Copilot</p>
               <h2 className="mt-3 font-display text-3xl font-semibold">Stream answers with policy retrieval.</h2>
               <textarea
                 className="field mt-5 min-h-32 resize-none border-white/10 bg-white/10 text-white placeholder:text-slate-300"
@@ -490,7 +490,7 @@ export function DashboardShell() {
                 value={assistantPrompt}
               />
               <button
-                className="button-primary mt-4 w-full bg-teal-500 text-slate-950 hover:bg-teal-300"
+                className="button-primary mt-4 w-full bg-violet-500 text-white hover:bg-fuchsia-500"
                 disabled={isStreaming}
                 onClick={() => { void streamAssistant(); }}
                 type="button"

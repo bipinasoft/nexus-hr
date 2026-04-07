@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { NexusLogo } from "@/components/branding/nexus-logo";
+
 export type SiteNavLink = {
   href: string;
   label: string;
@@ -28,14 +30,8 @@ export function SiteHeader({
     <header className="shell sticky top-4 z-50 pt-6 md:pt-8">
       <div className="site-nav px-5 py-4 md:px-7">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-          <Link className="flex items-center gap-4" href="/">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 font-display text-xl font-bold text-white">
-              N
-            </div>
-            <div>
-              <p className="font-display text-xl font-semibold text-slate-950">NexusHR</p>
-              <p className="text-sm text-slate-500">{subtitle}</p>
-            </div>
+          <Link href="/">
+            <NexusLogo subtitle={subtitle} />
           </Link>
 
           <nav className="hidden items-center gap-6 xl:flex">

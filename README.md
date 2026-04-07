@@ -11,7 +11,6 @@ NexusHR is a next-generation HRMS platform scaffold with:
 
 - `apps/web` - Next.js 16 + Tailwind CSS frontend
 - `backend` - unified FastAPI backend
-- `services/shared` - shared auth, RBAC, config, and audit utilities
 - `infra` - Docker Compose, Kubernetes manifests, and Helm chart
 - `docs` - architecture, ERD, and RAG/cache documentation
 - `scripts` - startup and shutdown helper scripts
@@ -247,7 +246,7 @@ The backend is a single FastAPI runtime with domain-based routers:
 - Employee dashboard shell: [`apps/web/src/components/dashboard/dashboard-shell.tsx`](./apps/web/src/components/dashboard/dashboard-shell.tsx)
 - Backend entrypoint: [`backend/app/main.py`](./backend/app/main.py)
 - Backend models: [`backend/app/db/models.py`](./backend/app/db/models.py)
-- Shared auth and RBAC: [`services/shared/nexus_shared/security.py`](./services/shared/nexus_shared/security.py)
+- Shared auth and RBAC: [`backend/app/platform/security.py`](./backend/app/platform/security.py)
 - Docker Compose: [`infra/docker-compose.yml`](./infra/docker-compose.yml)
 - Helm chart: [`infra/helm/nexushr`](./infra/helm/nexushr)
 

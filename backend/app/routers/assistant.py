@@ -2,10 +2,9 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from nexus_shared import Permission, Principal, require_permissions
-
 from ..core.contracts import AssistantRequest, AssistantResponse, KnowledgeIngestRequest
 from ..db.session import get_db_session
+from ..platform import Permission, Principal, require_permissions
 from ..services.assistant import answer_question, ingest_documents, stream_answer
 
 router = APIRouter(prefix="/v1/assistant", tags=["assistant"])

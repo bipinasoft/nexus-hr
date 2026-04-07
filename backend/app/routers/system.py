@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from nexus_shared.config import get_settings
+from ..platform.config import get_settings
 
 from ..db.session import database_manager
 from ..services.cache import cache_service

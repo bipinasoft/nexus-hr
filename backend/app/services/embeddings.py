@@ -4,7 +4,7 @@ import asyncio
 import hashlib
 import math
 
-from nexus_shared.config import get_settings
+from ..platform.config import get_settings
 
 
 class DeterministicEmbeddingService:

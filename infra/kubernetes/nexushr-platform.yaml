@@ -9,10 +9,19 @@ metadata:
   name: nexushr-config
   namespace: nexushr
 data:
+  NEXT_PUBLIC_API_BASE_URL: "https://api.nexushr.example.com"
+  NEXUSHR_SERVICE_NAME: "backend-service"
+  NEXUSHR_AUTH_MODE: "hybrid"
+  NEXUSHR_JWT_ISSUER: "https://api.nexushr.example.com/auth"
   NEXUSHR_OIDC_ISSUER_URL: "https://login.nexushr.example.com/realms/nexushr"
   NEXUSHR_OIDC_JWKS_URL: "https://login.nexushr.example.com/realms/nexushr/protocol/openid-connect/certs"
   NEXUSHR_OIDC_AUDIENCE: "nexushr-api"
-  NEXUSHR_MONGODB_AUDIT_URI: "mongodb://mongo-router.platform.svc.cluster.local:27017"
+  NEXUSHR_CORS_ORIGINS: "https://nexushr.example.com,https://api.nexushr.example.com"
+  NEXUSHR_BOOTSTRAP_DATABASE: "false"
+  NEXUSHR_SEED_DEMO_DATA: "false"
+  NEXUSHR_VECTOR_DIMENSIONS: "256"
+  NEXUSHR_LOCAL_LLM_BASE_URL: "http://ollama.default.svc.cluster.local:11434/v1"
+  NEXUSHR_LOCAL_LLM_MODEL: "llama3.1"
 ---
 apiVersion: v1
 kind: Secret
@@ -21,11 +30,11 @@ metadata:
   namespace: nexushr
 type: Opaque
 stringData:
-  DATABASE_URL: "REPLACE_WITH_MANAGED_POSTGRES_URL"
-  REDIS_URL: "redis://REPLACE_WITH_MANAGED_REDIS:6379/0"
-  S3_BUCKET: "nexushr-documents"
-  S3_REGION: "ap-south-1"
-  S3_KMS_KEY_ID: "REPLACE_WITH_KMS_KEY_ID"
+  NEXUSHR_JWT_SECRET: "REPLACE_WITH_A_LONG_RANDOM_SECRET"
+  NEXUSHR_DATABASE_URL: "postgresql+asyncpg://nexushr:nexushr@postgres.default.svc.cluster.local:5432/nexushr"
+  NEXUSHR_REDIS_URL: "redis://redis.default.svc.cluster.local:6379/0"
+  NEXUSHR_MONGODB_AUDIT_URI: "mongodb://mongo.default.svc.cluster.local:27017"
+  NEXUSHR_OPENAI_API_KEY: ""
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -45,11 +54,12 @@ spec:
       containers:
         - name: web
           image: ghcr.io/your-org/nexushr-web:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
-          env:
-            - name: NODE_ENV
-              value: "production"
+          envFrom:
+            - configMapRef:
+                name: nexushr-config
 ---
 apiVersion: v1
 kind: Service
@@ -66,21 +76,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-service
+  name: backend
   namespace: nexushr
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: auth-service
+      app: backend
   template:
     metadata:
       labels:
-        app: auth-service
+        app: backend
     spec:
       containers:
-        - name: auth-service
-          image: ghcr.io/your-org/nexushr-auth-service:latest
+        - name: backend
+          image: ghcr.io/your-org/nexushr-backend:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
           envFrom:
@@ -88,223 +99,15 @@ spec:
                 name: nexushr-config
             - secretRef:
                 name: nexushr-secrets
-          env:
-            - name: NEXUSHR_SERVICE_NAME
-              value: "auth-service"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: backend
   namespace: nexushr
 spec:
   selector:
-    app: auth-service
-  ports:
-    - port: 8000
-      targetPort: 8000
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: employee-service
-  namespace: nexushr
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: employee-service
-  template:
-    metadata:
-      labels:
-        app: employee-service
-    spec:
-      containers:
-        - name: employee-service
-          image: ghcr.io/your-org/nexushr-employee-service:latest
-          ports:
-            - containerPort: 8000
-          envFrom:
-            - configMapRef:
-                name: nexushr-config
-            - secretRef:
-                name: nexushr-secrets
-          env:
-            - name: NEXUSHR_SERVICE_NAME
-              value: "employee-service"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: employee-service
-  namespace: nexushr
-spec:
-  selector:
-    app: employee-service
-  ports:
-    - port: 8000
-      targetPort: 8000
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: attendance-service
-  namespace: nexushr
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: attendance-service
-  template:
-    metadata:
-      labels:
-        app: attendance-service
-    spec:
-      containers:
-        - name: attendance-service
-          image: ghcr.io/your-org/nexushr-attendance-service:latest
-          ports:
-            - containerPort: 8000
-          envFrom:
-            - configMapRef:
-                name: nexushr-config
-            - secretRef:
-                name: nexushr-secrets
-          env:
-            - name: NEXUSHR_SERVICE_NAME
-              value: "attendance-service"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: attendance-service
-  namespace: nexushr
-spec:
-  selector:
-    app: attendance-service
-  ports:
-    - port: 8000
-      targetPort: 8000
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: payroll-service
-  namespace: nexushr
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: payroll-service
-  template:
-    metadata:
-      labels:
-        app: payroll-service
-    spec:
-      containers:
-        - name: payroll-service
-          image: ghcr.io/your-org/nexushr-payroll-service:latest
-          ports:
-            - containerPort: 8000
-          envFrom:
-            - configMapRef:
-                name: nexushr-config
-            - secretRef:
-                name: nexushr-secrets
-          env:
-            - name: NEXUSHR_SERVICE_NAME
-              value: "payroll-service"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: payroll-service
-  namespace: nexushr
-spec:
-  selector:
-    app: payroll-service
-  ports:
-    - port: 8000
-      targetPort: 8000
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: performance-service
-  namespace: nexushr
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: performance-service
-  template:
-    metadata:
-      labels:
-        app: performance-service
-    spec:
-      containers:
-        - name: performance-service
-          image: ghcr.io/your-org/nexushr-performance-service:latest
-          ports:
-            - containerPort: 8000
-          envFrom:
-            - configMapRef:
-                name: nexushr-config
-            - secretRef:
-                name: nexushr-secrets
-          env:
-            - name: NEXUSHR_SERVICE_NAME
-              value: "performance-service"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: performance-service
-  namespace: nexushr
-spec:
-  selector:
-    app: performance-service
-  ports:
-    - port: 8000
-      targetPort: 8000
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: audit-service
-  namespace: nexushr
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: audit-service
-  template:
-    metadata:
-      labels:
-        app: audit-service
-    spec:
-      containers:
-        - name: audit-service
-          image: ghcr.io/your-org/nexushr-audit-service:latest
-          ports:
-            - containerPort: 8000
-          envFrom:
-            - configMapRef:
-                name: nexushr-config
-            - secretRef:
-                name: nexushr-secrets
-          env:
-            - name: NEXUSHR_SERVICE_NAME
-              value: "audit-service"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: audit-service
-  namespace: nexushr
-spec:
-  selector:
-    app: audit-service
+    app: backend
   ports:
     - port: 8000
       targetPort: 8000
@@ -312,17 +115,18 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nexushr-web
+  name: nexushr
   namespace: nexushr
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
   tls:
     - hosts:
-        - app.nexushr.example.com
-      secretName: nexushr-web-tls
+        - nexushr.example.com
+        - api.nexushr.example.com
+      secretName: nexushr-tls
   rules:
-    - host: app.nexushr.example.com
+    - host: nexushr.example.com
       http:
         paths:
           - path: /
@@ -332,3 +136,13 @@ spec:
                 name: web
                 port:
                   number: 80
+    - host: api.nexushr.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8000

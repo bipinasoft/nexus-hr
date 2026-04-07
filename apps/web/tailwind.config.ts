@@ -10,10 +10,11 @@ const config: Config = {
       colors: {
         canvas: "#f3f5f8",
         ink: "#0f172a",
-        brand: "#0f766e",
-        aqua: "#0891b2",
-        ember: "#ea580c",
-        sand: "#fff8ef"
+        brand: "#7c3aed",
+        orchid: "#a855f7",
+        plum: "#4c1d95",
+        lilac: "#f5f3ff",
+        sand: "#fff7ff"
       },
       fontFamily: {
         display: ["var(--font-space-grotesk)"],
@@ -25,4 +26,3 @@ const config: Config = {
 };
 
 export default config;
-
