@@ -1,69 +1,59 @@
-import Link from "next/link";
-
 import { SignupWizard } from "@/components/auth/signup-wizard";
+import { SiteFooter } from "@/components/marketing/site-footer";
+import { SiteHeader, type SiteNavLink } from "@/components/marketing/site-header";
+
+const navigationLinks: SiteNavLink[] = [
+  { label: "Products", href: "/#products" },
+  { label: "Platform", href: "/#platform" },
+  { label: "Security", href: "/#security" },
+  { label: "Launch", href: "/#launch" }
+];
 
 export default function CreateAccountPage() {
   return (
-    <main className="overflow-hidden py-8 md:py-12">
-      <section className="shell">
-        <div className="panel px-5 py-4 md:px-7">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 font-display text-lg font-bold text-white">
-                N
-              </div>
-              <div>
-                <p className="font-display text-xl font-semibold text-slate-950">NexusHR</p>
-                <p className="text-sm text-slate-500">Enterprise HRMS launch workspace</p>
-              </div>
+    <>
+      <SiteHeader
+        links={navigationLinks}
+        primaryAction={{ href: "/login", label: "Sign in" }}
+        secondaryAction={{ href: "/", label: "Back to website" }}
+        subtitle="Enterprise HRMS launch workspace"
+      />
+
+      <main className="overflow-hidden pb-6">
+        <section className="shell pt-10 md:pt-14">
+          <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-end">
+            <div className="space-y-6">
+              <span className="eyebrow">Launch workflow</span>
+              <h1 className="max-w-3xl font-display text-4xl font-semibold text-slate-950 md:text-6xl">
+                Create a branded HRMS workspace with the same polish as the public website.
+              </h1>
+              <p className="max-w-3xl text-lg leading-8 text-slate-600">
+                Configure company identity, rollout defaults, and security posture in a guided flow built for enterprise
+                HR and IT teams that want structure from the beginning.
+              </p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <Link className="button-secondary" href="/">
-                Back to website
-              </Link>
-              <Link className="button-primary" href="/login">
-                Sign in
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="shell pt-8 md:pt-10">
-        <div className="mb-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-          <div>
-            <Link className="eyebrow" href="/">
-              NexusHR launch flow
-            </Link>
-            <h1 className="mt-5 font-display text-4xl font-semibold text-slate-950 md:text-6xl">
-              Create a branded HRMS workspace without skipping security, payroll, or policy design.
-            </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-              Configure your company identity, rollout defaults, and security posture in one guided flow designed for
-              enterprise HR and IT teams.
-            </p>
-          </div>
-
-          <div className="panel px-6 py-6">
-            <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Launch expectations</p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-3">
               {[
                 ["Day 0", "Workspace ready"],
                 ["3", "Launch steps"],
                 ["100%", "Security-first setup"]
               ].map(([value, label]) => (
-                <div className="rounded-[24px] border border-slate-200 bg-slate-50 px-4 py-4" key={label}>
+                <div className="website-card h-full px-5 py-5" key={label}>
                   <p className="font-display text-3xl font-semibold text-slate-950">{value}</p>
                   <p className="mt-2 text-xs uppercase tracking-[0.18em] text-slate-500">{label}</p>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </section>
 
-        <SignupWizard />
-      </section>
-    </main>
+        <section className="shell pt-10 md:pt-12">
+          <SignupWizard />
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
   );
 }
