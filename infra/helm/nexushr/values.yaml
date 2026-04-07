@@ -22,7 +22,7 @@ backend:
     authMode: local
     jwtIssuer: https://api.nexushr.local/auth
     oidcAudience: nexushr-api
-    corsOrigins: https://nexushr.example.com
+    corsOrigins: https://nexushr.example.com,http://localhost:3000,http://127.0.0.1:3000
     bootstrapDatabase: "true"
     seedDemoData: "false"
     vectorDimensions: "256"

@@ -38,7 +38,7 @@ services:
       NEXUSHR_OIDC_ISSUER_URL: https://login.nexushr.example.com/realms/nexushr
       NEXUSHR_OIDC_JWKS_URL: https://login.nexushr.example.com/realms/nexushr/protocol/openid-connect/certs
       NEXUSHR_OIDC_AUDIENCE: nexushr-api
-      NEXUSHR_CORS_ORIGINS: http://localhost:3000
+      NEXUSHR_CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
       NEXUSHR_MONGODB_AUDIT_URI: mongodb://mongo:27017
 
   postgres:

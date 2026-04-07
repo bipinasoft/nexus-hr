@@ -28,7 +28,12 @@ class Settings(BaseSettings):
     seed_demo_data: bool = True
     redis_url: str = "redis://localhost:6380/0"
     cache_ttl_seconds: int = 300
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
+    cors_origins: list[str] = Field(
+        default_factory=lambda: [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+        ]
+    )
     mongodb_audit_uri: str = "mongodb://localhost:27017"
     mongodb_audit_db: str = "nexushr_audit"
     mongodb_audit_collection: str = "events"
