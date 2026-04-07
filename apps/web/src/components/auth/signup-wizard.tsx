@@ -33,7 +33,7 @@ export function SignupWizard() {
             return (
               <button
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                  active ? "bg-teal-700 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  active ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
                 key={item.id}
                 onClick={() => setStep(index)}
@@ -179,7 +179,7 @@ export function SignupWizard() {
       </div>
 
       <aside className="panel-dark px-6 py-6 md:px-8">
-        <p className="text-xs uppercase tracking-[0.25em] text-teal-200">Launch blueprint</p>
+        <p className="text-xs uppercase tracking-[0.25em] text-cyan-200">Launch blueprint</p>
         <h2 className="mt-4 font-display text-3xl font-semibold">A workspace creation flow built for enterprise HR teams.</h2>
         <div className="mt-6 space-y-4">
           {[
