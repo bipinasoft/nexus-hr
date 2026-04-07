@@ -1,214 +1,141 @@
 # NexusHR Core ERD
 
-The ERD below models the HR core with coverage for employee lifecycle, attendance, leave, payroll, performance, documents, assets, and approval workflows.
+This ERD reflects the runnable backend schema used for the current dashboard, attendance, leave, notifications, and RAG features.
 
 ```mermaid
 erDiagram
-    DEPARTMENT ||--o{ EMPLOYEE : contains
+    ORGANIZATION ||--o{ DEPARTMENT : owns
+    ORGANIZATION ||--o{ POSITION : owns
+    ORGANIZATION ||--o{ EMPLOYEE : isolates
+    ORGANIZATION ||--o{ ATTENDANCE_RECORD : scopes
+    ORGANIZATION ||--o{ LEAVE_REQUEST : scopes
+    ORGANIZATION ||--o{ LEAVE_BALANCE : scopes
+    ORGANIZATION ||--o{ HOLIDAY : scopes
+    ORGANIZATION ||--o{ NOTIFICATION : scopes
+    ORGANIZATION ||--o{ KNOWLEDGE_DOCUMENT : indexes
+    KNOWLEDGE_DOCUMENT ||--o{ KNOWLEDGE_CHUNK : chunks
+    DEPARTMENT ||--o{ EMPLOYEE : assigns
     POSITION ||--o{ EMPLOYEE : assigns
-    EMPLOYEE ||--|| EMPLOYMENT_PROFILE : has
-    EMPLOYEE ||--o{ EMPLOYEE_DOCUMENT : owns
-    EMPLOYEE ||--o{ ASSET_ASSIGNMENT : receives
     EMPLOYEE ||--o{ ATTENDANCE_RECORD : records
     EMPLOYEE ||--o{ LEAVE_REQUEST : submits
-    EMPLOYEE ||--o{ LEAVE_BALANCE : accrues
-    EMPLOYEE ||--o{ PAYROLL_RUN_ITEM : paid_in
-    EMPLOYEE ||--o{ OBJECTIVE : owns
-    EMPLOYEE ||--o{ FEEDBACK_ENTRY : receives
-    EMPLOYEE ||--o{ FEEDBACK_ENTRY : gives
-    EMPLOYEE ||--o{ APPROVAL_STEP : approves
-    LEAVE_POLICY ||--o{ LEAVE_BALANCE : governs
-    LEAVE_POLICY ||--o{ LEAVE_REQUEST : validates
-    APPROVAL_WORKFLOW ||--o{ APPROVAL_STEP : contains
-    APPROVAL_WORKFLOW ||--o{ LEAVE_REQUEST : orchestrates
-    PAYROLL_RUN ||--o{ PAYROLL_RUN_ITEM : includes
-    PERFORMANCE_CYCLE ||--o{ OBJECTIVE : contains
-    PERFORMANCE_CYCLE ||--o{ FEEDBACK_ENTRY : contains
+    EMPLOYEE ||--o{ LEAVE_BALANCE : holds
+    EMPLOYEE ||--o{ NOTIFICATION : receives
+
+    ORGANIZATION {
+        string id PK
+        string name
+        string slug
+        string primary_domain
+        string region_code
+        string status
+    }
+
+    DEPARTMENT {
+        string id PK
+        string org_id FK
+        string name
+        string code
+    }
+
+    POSITION {
+        string id PK
+        string org_id FK
+        string title
+        string level
+        string description
+    }
 
     EMPLOYEE {
-        uuid employee_id PK
+        string id PK
+        string user_id
+        string org_id FK
         string employee_code
         string first_name
         string last_name
         string work_email
-        string personal_email
-        date date_of_birth
-        string gender
-        string phone_number
-        uuid department_id FK
-        uuid position_id FK
-        uuid manager_id FK
-        date hire_date
-        date exit_date
+        string role
         string employment_status
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    EMPLOYMENT_PROFILE {
-        uuid employment_profile_id PK
-        uuid employee_id FK
-        string employment_type
-        string work_location
-        string legal_entity
-        string cost_center
-        string grade
-        decimal annual_ctc
-        string tax_regime
-        boolean device_trust_enabled
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    DEPARTMENT {
-        uuid department_id PK
-        string name
-        string code
-        uuid head_employee_id FK
-        timestamp created_at
-    }
-
-    POSITION {
-        uuid position_id PK
-        string title
-        string description
-        string level
-        string job_family
-        timestamp created_at
-    }
-
-    EMPLOYEE_DOCUMENT {
-        uuid document_id PK
-        uuid employee_id FK
-        string document_type
-        string storage_key
-        string signature_status
-        string retention_policy
-        timestamp uploaded_at
-    }
-
-    ASSET_ASSIGNMENT {
-        uuid asset_assignment_id PK
-        uuid employee_id FK
-        string asset_tag
-        string asset_type
-        string serial_number
-        date assigned_on
-        date expected_return_on
-        string assignment_status
+        string password_hash
+        string department_id FK
+        string position_id FK
+        string team_id
+        string manager_id
+        datetime hire_date
+        string timezone
     }
 
     ATTENDANCE_RECORD {
-        uuid attendance_record_id PK
-        uuid employee_id FK
-        date attendance_date
-        timestamp check_in_at
-        timestamp check_out_at
-        decimal latitude
-        decimal longitude
+        string id PK
+        string org_id FK
+        string employee_id FK
+        date work_date
+        string status
+        datetime check_in_at
+        datetime check_out_at
+        float total_hours
         boolean geofence_passed
-        string source
-    }
-
-    LEAVE_POLICY {
-        uuid leave_policy_id PK
-        string name
-        string leave_type
-        decimal accrual_rate
-        decimal carry_forward_limit
-        boolean requires_attachment
-        boolean is_active
-    }
-
-    LEAVE_BALANCE {
-        uuid leave_balance_id PK
-        uuid employee_id FK
-        uuid leave_policy_id FK
-        decimal opening_balance
-        decimal accrued_balance
-        decimal consumed_balance
-        decimal available_balance
-        date balance_period_start
-        date balance_period_end
+        string location_label
+        string notes
     }
 
     LEAVE_REQUEST {
-        uuid leave_request_id PK
-        uuid employee_id FK
-        uuid leave_policy_id FK
-        uuid approval_workflow_id FK
+        string id PK
+        string org_id FK
+        string employee_id FK
+        string approver_id
+        string leave_type
         date start_date
         date end_date
+        string status
         string reason
-        string approval_status
-        timestamp submitted_at
     }
 
-    APPROVAL_WORKFLOW {
-        uuid approval_workflow_id PK
-        string workflow_name
-        string entity_type
-        integer levels
-        boolean is_active
+    LEAVE_BALANCE {
+        string id PK
+        string org_id FK
+        string employee_id FK
+        string leave_type
+        float allocated_days
+        float used_days
+        float pending_days
     }
 
-    APPROVAL_STEP {
-        uuid approval_step_id PK
-        uuid approval_workflow_id FK
-        uuid approver_employee_id FK
-        integer level_number
-        string action_status
-        timestamp actioned_at
-        string comment
-    }
-
-    PAYROLL_RUN {
-        uuid payroll_run_id PK
-        string pay_period
-        string payroll_status
-        date period_start
-        date period_end
-        date payout_date
-        timestamp generated_at
-    }
-
-    PAYROLL_RUN_ITEM {
-        uuid payroll_run_item_id PK
-        uuid payroll_run_id FK
-        uuid employee_id FK
-        decimal gross_pay
-        decimal deductions_total
-        decimal tax_total
-        decimal net_pay
-        string payslip_storage_key
-    }
-
-    PERFORMANCE_CYCLE {
-        uuid performance_cycle_id PK
+    HOLIDAY {
+        string id PK
+        string org_id FK
+        date holiday_date
         string name
-        date start_date
-        date end_date
-        string cycle_status
+        string kind
     }
 
-    OBJECTIVE {
-        uuid objective_id PK
-        uuid performance_cycle_id FK
-        uuid employee_id FK
+    NOTIFICATION {
+        string id PK
+        string org_id FK
+        string recipient_id FK
         string title
-        string description
-        decimal progress_percent
-        string confidence
+        string message
+        string severity
+        json tags
+        string action_url
+        boolean is_read
     }
 
-    FEEDBACK_ENTRY {
-        uuid feedback_entry_id PK
-        uuid performance_cycle_id FK
-        uuid subject_employee_id FK
-        uuid reviewer_employee_id FK
-        string feedback_type
-        text comments
-        decimal sentiment_score
-        timestamp submitted_at
+    KNOWLEDGE_DOCUMENT {
+        string id PK
+        string org_id FK
+        string title
+        string source
+        json tags
+        string status
+    }
+
+    KNOWLEDGE_CHUNK {
+        string id PK
+        string org_id FK
+        string document_id FK
+        int chunk_index
+        text content
+        json metadata_json
+        vector embedding
     }
 ```

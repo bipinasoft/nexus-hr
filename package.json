@@ -6,10 +6,14 @@
     "apps/web"
   ],
   "scripts": {
+    "dev:backend": "cd backend && uvicorn app.main:app --reload --port 8007",
     "dev:web": "npm run dev --workspace @nexushr/web",
+    "compose:up": "docker compose -f infra/docker-compose.yml up -d --build",
+    "compose:down": "docker compose -f infra/docker-compose.yml down",
+    "build:backend": "python -m compileall backend services/shared",
     "build:web": "npm run build --workspace @nexushr/web",
     "lint:web": "npm run lint --workspace @nexushr/web",
+    "test:backend": "cd backend && python -m pytest",
     "test:e2e": "npm run e2e --workspace @nexushr/web"
   }
 }
-

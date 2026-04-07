@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nexushr.fullname" . }}-backend
+spec:
+  selector:
+    app.kubernetes.io/name: {{ include "nexushr.name" . }}
+    app.kubernetes.io/component: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: {{ .Values.backend.service.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nexushr.fullname" . }}-web
+spec:
+  selector:
+    app.kubernetes.io/name: {{ include "nexushr.name" . }}
+    app.kubernetes.io/component: web
+  ports:
+    - name: http
+      port: 80
+      targetPort: {{ .Values.web.service.port }}

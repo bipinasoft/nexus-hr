@@ -12,6 +12,26 @@ class PayrollPreviewRequest(BaseModel):
     statutory_region: str = "IN"
 
 
+@router.get("/summary/me")
+async def read_my_payroll_summary(
+    principal: Principal = Depends(require_permissions(Permission.PAYROLL_READ)),
+) -> dict[str, object]:
+    return {
+        "employee_id": principal.user_id,
+        "latest_payslip": {
+            "pay_period": "2026-04",
+            "gross_pay": 168000,
+            "net_pay": 141200,
+            "deductions": {
+                "epf": 1800,
+                "esi": 0,
+                "tds": 21000,
+            },
+            "status": "published",
+        },
+    }
+
+
 @router.post("/runs/preview")
 async def preview_payroll_run(
     payload: PayrollPreviewRequest,
@@ -30,4 +50,3 @@ async def preview_payroll_run(
         ],
         "generated_by": principal.user_id,
     }
-

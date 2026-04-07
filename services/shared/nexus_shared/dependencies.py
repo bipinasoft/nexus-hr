@@ -35,6 +35,31 @@ def require_permissions(*permissions: str) -> Callable[..., Principal]:
     return dependency
 
 
+def require_roles(*roles: Role) -> Callable[..., Principal]:
+    async def dependency(
+        principal: Principal = Depends(get_current_principal),
+    ) -> Principal:
+        if any(principal.has_role(role) for role in roles):
+            return principal
+
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Role restriction violation.",
+        )
+
+    return dependency
+
+
+def enforce_org_scope(org_id: str, principal: Principal) -> None:
+    if principal.is_in_org(org_id):
+        return
+
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Tenant scope violation.",
+    )
+
+
 def enforce_department_scope(department_id: str, principal: Principal) -> None:
     if principal.has_role(Role.SUPER_ADMIN) or department_id in principal.department_ids:
         return
@@ -53,4 +78,3 @@ def enforce_team_scope(team_id: str, principal: Principal) -> None:
         status_code=status.HTTP_403_FORBIDDEN,
         detail="Team scope violation.",
     )
-

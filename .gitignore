@@ -15,5 +15,6 @@ venv/
 *.pyd
 .env
 .env.local
+.run-logs/
 .DS_Store
 Thumbs.db

@@ -27,7 +27,12 @@ async def read_my_objectives(
         "objectives": [
             {"title": "Reduce payroll query turnaround", "progress_percent": 72},
             {"title": "Close onboarding tasks within SLA", "progress_percent": 81},
+            {"title": "Increase dashboard adoption across field teams", "progress_percent": 64},
         ],
+        "review_sentiment": {
+            "summary": "Positive trend with scope for coaching on workload balance.",
+            "score": 0.78,
+        },
     }
 
 
@@ -42,6 +47,5 @@ async def submit_feedback(
         "cycle_id": payload.cycle_id,
         "subject_employee_id": payload.subject_employee_id,
         "submitted_by": principal.user_id,
-        "sentiment_pipeline_status": "queued",
+        "sentiment_pipeline_status": "indexed-and-queued",
     }
-

@@ -76,8 +76,13 @@ class AuditMiddleware(BaseHTTPMiddleware):
                         "route": route_path,
                         "query_string": request.url.query,
                         "user_id": principal.user_id if principal else "anonymous",
-                        "roles": sorted(principal.roles) if principal else [],
+                        "org_id": principal.org_id if principal else "unknown",
+                        "tenant_slug": principal.tenant_slug if principal else "unknown",
+                        "roles": sorted(role.value for role in principal.roles)
+                        if principal
+                        else [],
                         "ip_address": extract_client_ip(request),
+                        "user_agent": request.headers.get("user-agent", "unknown"),
                         "status_code": status_code,
                         "request_id": request.headers.get("x-request-id", str(uuid4())),
                         "error_message": error_message,

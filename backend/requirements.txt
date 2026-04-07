@@ -1,5 +1,11 @@
 -e ../services/shared
+alembic>=1.14.1,<2.0.0
+asyncpg>=0.30.0,<1.0.0
 fastapi>=0.115.0,<1.0.0
+langgraph>=0.3.34,<1.0.0
+openai>=1.76.0,<2.0.0
+pgvector>=0.4.1,<1.0.0
+redis[hiredis]>=6.0.0,<7.0.0
+sqlalchemy>=2.0.41,<3.0.0
 uvicorn[standard]>=0.32.0,<1.0.0
 pytest>=8.3.4,<9.0.0
-

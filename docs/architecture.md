@@ -2,139 +2,155 @@
 
 ## Architectural principles
 
-- Microservice ownership by bounded context to keep HR workflows modular and independently deployable.
-- Domain-driven design so employee lifecycle, attendance, payroll, performance, and audit streams stay cohesive.
-- API-first delivery with FastAPI and OpenAPI for internal and external integrations.
-- Zero-trust security posture with OIDC, MFA, RBAC, and immutable audit capture.
-- Cloud-ready deployment model for AWS EKS or Azure Kubernetes Service with managed data services.
+- Domain-driven design with clean boundaries even inside the unified local backend
+- Security-first identity model with JWT, OIDC/SSO hooks, MFA, and RBAC
+- Multi-tenant isolation through org-scoped claims, tenant domains, and org-aware queries
+- Production-ready persistence with PostgreSQL, Redis, MongoDB, and pgvector
+- AI orchestration through LangGraph with OpenAI to local-LLM fallback
 
 ## High-level system architecture
 
 ```mermaid
 flowchart TB
-    subgraph Users["Users & Personas"]
+    subgraph Users["Users"]
         SA["Super Admin"]
         HR["HR Manager"]
         MG["Manager"]
         EM["Employee"]
     end
 
-    subgraph Frontend["Experience Layer"]
-        WEB["Next.js Web Portal\nLanding, Login, Self-Service Dashboard"]
-        CDN["CDN / WAF"]
+    subgraph Experience["Experience Layer"]
+        WEB["Next.js Web App<br/>Branding, Login, Create Account, Dashboard"]
+        WS["WebSocket Notifications"]
+        SSE["Streaming Copilot UI"]
     end
 
-    subgraph Identity["Identity & Security"]
-        IDP["OIDC / OAuth2 Identity Provider\nMFA, SSO, Device Trust"]
-        AUTH["Auth Service\nToken exchange, profile sync"]
-        RBAC["RBAC / Policy Engine"]
+    subgraph Security["Identity & Security"]
+        JWT["JWT + MFA"]
+        SSO["OIDC / Enterprise SSO"]
+        RBAC["RBAC + Tenant Scope"]
+        AUDIT["Audit Middleware"]
     end
 
-    subgraph Services["NexusHR Microservices"]
-        EMP["Employee Lifecycle Service"]
-        ATT["Attendance & Leave Service"]
-        PAY["Payroll & Compliance Service"]
-        PERF["Performance Service"]
-        AUD["Audit Service"]
-        NOTIFY["Notification / Workflow Service"]
+    subgraph Backend["Unified FastAPI Backend"]
+        API["Gateway App"]
+        AUTH["Auth Domain"]
+        DASH["Dashboard Domain"]
+        ATT["Attendance & Leave Domain"]
+        PAY["Payroll Domain"]
+        PERF["Performance Domain"]
+        NOTIFY["Notifications Domain"]
+        AI["Assistant / LangGraph Domain"]
     end
 
-    subgraph Data["Data & Platform Services"]
-        PG["PostgreSQL\nTransactional HR Data"]
-        REDIS["Redis\nSessions, cache, queues"]
-        MONGO["MongoDB\nAudit events"]
-        S3["S3 / Blob Storage\nEncrypted documents"]
-        AI["AI Insight Workers\nSentiment / anomaly analysis"]
+    subgraph Data["Platform Data Services"]
+        PG["PostgreSQL"]
+        VEC["pgvector Index"]
+        REDIS["Redis Cache / Session Acceleration"]
+        MONGO["MongoDB Audit Store"]
+        S3["Encrypted Document Storage"]
     end
 
-    subgraph Ops["Cloud Operations"]
-        API["API Gateway / Ingress"]
-        EKS["Kubernetes (EKS / AKS)"]
-        OBS["Observability\nLogs, metrics, traces, SIEM"]
-        CI["CI/CD + IaC"]
+    subgraph AIStack["AI Runtime"]
+        GRAPH["LangGraph State Machine"]
+        OPENAI["OpenAI Provider"]
+        LOCAL["Local LLM Provider"]
+        INDEX["Indexing Pipeline"]
+    end
+
+    subgraph Deploy["Deployment"]
+        DOCKER["Docker Compose"]
+        HELM["Helm Chart"]
+        K8S["Kubernetes / EKS / AKS"]
+        CI["GitHub Actions CI/CD"]
     end
 
     SA --> WEB
     HR --> WEB
     MG --> WEB
     EM --> WEB
-    WEB --> CDN --> API
-    WEB --> IDP
+
+    WEB --> JWT
+    WEB --> SSO
+    WEB --> API
+    WEB --> WS
+    WEB --> SSE
+
+    JWT --> RBAC
+    SSO --> RBAC
+    RBAC --> AUTH
+    AUDIT --> MONGO
+
     API --> AUTH
-    AUTH --> IDP
-    AUTH --> RBAC
-    API --> EMP
+    API --> DASH
     API --> ATT
     API --> PAY
     API --> PERF
-    API --> AUD
-    EMP --> PG
+    API --> NOTIFY
+    API --> AI
+
+    DASH --> REDIS
+    DASH --> PG
     ATT --> PG
+    ATT --> REDIS
     PAY --> PG
     PERF --> PG
+    NOTIFY --> PG
+    NOTIFY --> WS
     AUTH --> REDIS
-    ATT --> REDIS
-    PAY --> REDIS
-    EMP --> S3
-    AUD --> MONGO
-    PERF --> AI
-    PAY --> NOTIFY
-    EMP --> NOTIFY
-    ATT --> NOTIFY
-    AUTH --> OBS
-    EMP --> OBS
-    ATT --> OBS
-    PAY --> OBS
-    PERF --> OBS
-    AUD --> OBS
-    CI --> EKS
-    API --> EKS
+    AUTH --> PG
+    AUTH --> AUDIT
+    AI --> GRAPH
+    GRAPH --> INDEX
+    GRAPH --> OPENAI
+    GRAPH --> LOCAL
+    INDEX --> PG
+    INDEX --> VEC
+    AI --> REDIS
+    API --> S3
+
+    DOCKER --> API
+    DOCKER --> WEB
+    HELM --> K8S
+    CI --> HELM
+    CI --> DOCKER
 ```
 
-## Service boundaries
+## Runtime domains
 
-### Employee lifecycle service
+### Auth
 
-- Owns employee profiles, contracts, onboarding checklists, digital document pointers, assets, and offboarding events.
-- Publishes lifecycle events that downstream services consume for payroll setup, access provisioning, and asset recovery.
+- Local JWT mode for direct development and seeded demo users
+- OIDC/SSO launch hooks for enterprise federation
+- MFA validation and role claim issuance
 
-### Attendance and leave service
+### Dashboard
 
-- Owns shifts, geofence rules, check-in records, leave policies, leave balances, accrual jobs, and approval workflows.
-- Uses Redis for short-lived geolocation/session caching and approval workflow acceleration.
+- Consolidated monthly employee view
+- Attendance, leave, holiday, and anomaly markers
+- Cached employee month responses in Redis
 
-### Payroll and compliance service
+### Attendance and leave
 
-- Owns salary structures, pay runs, deduction rules, tax adapters, payslips, and statutory extracts for EPF, ESI, and TDS.
-- Integrates with notification services for payroll closure and payslip delivery.
+- Geofence-aware check-in
+- Leave requests and approval paths
+- Cache invalidation on write operations
 
-### Performance service
+### Notifications
 
-- Owns OKRs, performance cycles, calibration data, 360-degree feedback, and sentiment-analysis orchestration.
-- Sends review text to AI workers through an asynchronous queue for sentiment scoring and anomaly flags.
+- Tagged employee alerts for quick response
+- Read acknowledgment APIs
+- WebSocket push channel for live updates
 
-### Audit service
+### Assistant and RAG
 
-- Centralizes write-operation audit events across all services.
-- Stores immutable compliance records in MongoDB with search indexes for regulators and internal audit teams.
+- LangGraph state machine for classify → retrieve → answer → action
+- pgvector-ready chunk storage
+- OpenAI primary model with local-LLM fallback
+- SSE streaming for frontend responses
 
-## Security model
+## Deployment model
 
-- Authentication: OIDC/OAuth2 with MFA, device trust, and external IdP federation support.
-- Authorization: RBAC permissions mapped to Super Admin, HR Manager, Manager, and Employee personas.
-- Audit: every POST, PUT, PATCH, and DELETE operation is logged with timestamp, IP, service, user ID, and result.
-- Data protection: TLS in transit, S3 encryption at rest, database-level encryption options, and secrets externalized to the runtime.
-- Privacy: consent-aware document handling, retention workflows, and deletion/anonymization hooks for GDPR requests.
-
-## Recommended deployment topology
-
-- Frontend deployed as a containerized Next.js application behind CDN and WAF.
-- FastAPI services deployed as independent Kubernetes workloads with horizontal pod autoscaling.
-- PostgreSQL, Redis, MongoDB, and S3 hosted as managed cloud services when running in production.
-- Observability routed to a SIEM stack to meet ISO 27001 monitoring and incident-response controls.
-
-## Development deployment profile
-
-- For local development, NexusHR can run as a single FastAPI backend that includes all HR domains as modular routers.
-- This keeps onboarding and debugging simple while preserving the same route contracts and shared security middleware.
-- The unified backend lives in [backend/app/main.py](D:\coledra-code\nexus-hr\backend\app\main.py) and the domain routers live in [backend/app/routers](D:\coledra-code\nexus-hr\backend\app\routers).
+- Local: one FastAPI backend plus web app via Docker Compose
+- Cloud: split web/backend deployments behind ingress with Redis/PostgreSQL/Mongo managed services
+- Kubernetes packaging: Helm chart under [infra/helm/nexushr](D:\coledra-code\nexus-hr\infra\helm\nexushr)

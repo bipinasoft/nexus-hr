@@ -1,0 +1,47 @@
+nameOverride: ""
+fullnameOverride: ""
+
+web:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/bipinasoft/nexus-hr-web
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    port: 3000
+
+backend:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/bipinasoft/nexus-hr-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    port: 8000
+  env:
+    authMode: local
+    jwtIssuer: https://api.nexushr.local/auth
+    oidcAudience: nexushr-api
+    corsOrigins: https://nexushr.example.com
+    bootstrapDatabase: "true"
+    seedDemoData: "false"
+    vectorDimensions: "256"
+    localLlmBaseUrl: http://ollama.default.svc.cluster.local:11434/v1
+    localLlmModel: llama3.1
+
+platform:
+  databaseUrl: postgresql+asyncpg://nexushr:nexushr@postgres.default.svc.cluster.local:5432/nexushr
+  redisUrl: redis://redis.default.svc.cluster.local:6379/0
+  mongoAuditUri: mongodb://mongo.default.svc.cluster.local:27017
+  publicApiUrl: https://api.nexushr.example.com
+
+secrets:
+  jwtSecret: change-me
+  openaiApiKey: ""
+
+ingress:
+  enabled: true
+  className: nginx
+  webHost: nexushr.example.com
+  apiHost: api.nexushr.example.com
+  tlsSecretName: nexushr-tls
